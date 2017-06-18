@@ -11,11 +11,13 @@ You can define a custom action to build a rust project like so.
 
 ## Installation and set up
 
- - [x]  Search for custom action buttons in the extensions store.
+ - [x]  Search for `VsCode Action Buttons` in the extensions store.
 
  - [x] After installing, type `ctrl + shift + p` and open up work space settings.
 
- - [x] Now you can define, your action buttons. Below is a sample
+ - [x] Now you can define, your action buttons. Below is a sample.
+
+ - [x] Now Reload.
 
  ```json
  	"run": {
@@ -34,9 +36,18 @@ You can define a custom action to build a rust project like so.
 	 }
  ```
 
+ # Alternatively
+
+ If you open an existing project and want to set up action buttons for that workspace.
+
+ * Define the action buttons in your workspace settings.
+ * Then, type `ctrl + shift + p`, search for `Refresh Action Buttons` and click on it.
+ * You Should now see the action buttons on the status bar :).
+
 
 ## Release Notes
 
-
+### v0.0.3
+Better documentation.
 ### v0.0.1
   Initial Release

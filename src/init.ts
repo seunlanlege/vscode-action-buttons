@@ -27,7 +27,7 @@ function init (context) {
 			loadButton({ command: `extension.${command.replace(' ', '')}`, name, color })
 			})
 		} else {
-      vscode.window.showInformationMessage('You have no run commands ');			
+      vscode.window.showInformationMessage('VsCode Action Buttons: You have no run commands ');			
 		}
 
 }
