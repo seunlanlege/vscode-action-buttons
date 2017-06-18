@@ -2,7 +2,7 @@
     "name": "action-buttons",
     "displayName": "VsCode Action Buttons",
     "description": "",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "publisher": "seunlanlege",
     "engines": {
         "vscode": "^1.13.0"
