@@ -6,6 +6,11 @@ type RunButton = {
 	color: string,
 }
 
+type Terminal = {
+	name: string,
+	terminal: vscode.Terminal,
+}
+
 const registerCommand = vscode.commands.registerCommand
 
 function init (context) {
@@ -14,20 +19,30 @@ function init (context) {
 	const commands = config.get("commands") as [RunButton] 
 
 		if (commands) {
+			const terminals = [] as [Terminal]
 			commands.forEach(({ command, name, color }: RunButton) => {
+				const vsCommand = `extension.${command.replace(' ', '')}`
 	
-			let disposable = registerCommand(`extension.${command.replace(' ', '')}`, () => {			
-				const terminal = vscode.window.createTerminal()
-				terminal.show(false)
-				terminal.sendText(command)				
-			});
+				let disposable = registerCommand(vsCommand, () => {
+					const assocTerminal = terminals.find(el => el.name === vsCommand)
+					if (!assocTerminal) {
+						const terminal = vscode.window.createTerminal()
+						terminal.show(false)
+						terminal.sendText(command)
+						terminals.push({ name: vsCommand, terminal })
+					} else {
+						assocTerminal.terminal.show()
+						assocTerminal.terminal.sendText('clear')
+						assocTerminal.terminal.sendText(command)
+					}
+				});
 
-			context.subscriptions.push(disposable);
+				context.subscriptions.push(disposable);
 
-			loadButton({ command: `extension.${command.replace(' ', '')}`, name, color })
+				loadButton({ command: vsCommand, name, color })
 			})
 		} else {
-      vscode.window.showInformationMessage('VsCode Action Buttons: You have no run commands ');			
+      // vscode.window.showInformationMessage('VsCode Action Buttons: You have no run commands ');			
 		}
 
 }
