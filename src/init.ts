@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { getPackageJson } from './packageJson'
 
 type RunButton = {
 	command: string,
@@ -13,10 +14,32 @@ type Terminal = {
 
 const registerCommand = vscode.commands.registerCommand
 
-function init (context) {
-	const config = vscode.workspace.getConfiguration("run")
+const init =  async (context) => {
+	let packageJson;
+	try {
+		packageJson = await getPackageJson()
+	} catch (e) {
+		console.log('Could Not Read package.json')
+	}
+	const config = vscode.workspace.getConfiguration("run").get("commands") as [RunButton]
+	let commands = [];
 
-	const commands = config.get("commands") as [RunButton] 
+	if (config) {
+		commands.push(...config)
+	}
+
+	if (typeof packageJson !== 'undefined') {
+		const { scripts } = packageJson
+		let keys = Object.keys(scripts);
+	
+		const packageJsonCommands = keys.map(key => ({
+			command: `npm run ${key}`,
+			color: 'green',
+			name: key,
+		})) as [RunButton]
+
+		commands = [...packageJsonCommands]
+	}
 
 		if (commands) {
 			const terminals = [] as [Terminal]

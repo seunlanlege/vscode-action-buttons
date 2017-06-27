@@ -47,7 +47,11 @@ You can define a custom action to build a rust project like so.
 
 ## Release Notes
 
+### v0.0.6
+added support for reading actions from the scripts segment of package.json.
+
 ### v0.0.3
 Better documentation.
+
 ### v0.0.1
   Initial Release
