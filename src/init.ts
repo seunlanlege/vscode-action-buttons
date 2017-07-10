@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
 import { getPackageJson } from './packageJson'
 
-type RunButton = {
+interface RunButton {
 	command: string,
 	name: string,
 	color: string,
 }
 
-type Terminal = {
+interface Terminal {
 	name: string,
 	terminal: vscode.Terminal,
 }
@@ -21,11 +21,13 @@ const init =  async (context) => {
 	} catch (e) {
 		console.log('Could Not Read package.json')
 	}
-	const config = vscode.workspace.getConfiguration("run").get("commands") as [RunButton]
+	const config = vscode.workspace.getConfiguration("run")
+	const defaultColor = config.get("defaultColor")
+	const cmd = config.get("commands") as [RunButton]
 	let commands = [];
 
 	if (config) {
-		commands.push(...config)
+		commands.push(...cmd)
 	}
 
 	if (typeof packageJson !== 'undefined') {
@@ -34,7 +36,7 @@ const init =  async (context) => {
 	
 		const packageJsonCommands = keys.map(key => ({
 			command: `npm run ${key}`,
-			color: 'green',
+			color: defaultColor || 'green',
 			name: key,
 		})) as [RunButton]
 
