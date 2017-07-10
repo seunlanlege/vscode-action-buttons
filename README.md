@@ -21,11 +21,12 @@ You can define a custom action to build a rust project like so.
 
  ```json
  	"run": {
+		 "defaultColor": "#ff0034", // Can also use string color names.
 		 "commands": [
 			 {
 				 "name": "Run Cargo",
 				 "color": "green",
-				 "command": "cargo run", // This is executed in the terminal
+				 "command": "cargo run", // This is executed in the terminal.
 			 },
 			 {
 				 "name": "Build Cargo",
@@ -47,8 +48,11 @@ You can define a custom action to build a rust project like so.
 
 ## Release Notes
 
+###v0.0.7
+Added support for default Colors
+
 ### v0.0.6
-added support for reading actions from the scripts segment of package.json.
+Added support for reading actions from the scripts segment of package.json.
 
 ### v0.0.3
 Better documentation.
