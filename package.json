@@ -2,7 +2,7 @@
     "name": "action-buttons",
     "displayName": "VsCode Action Buttons",
     "description": "",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "publisher": "seunlanlege",
 		"repository": {
 			"type": "git",
