@@ -3,6 +3,7 @@ import { getPackageJson } from './packageJson'
 
 interface RunButton {
 	command: string,
+	singleInstance?: boolean,
 	name: string,
 	color: string,
 }
@@ -14,7 +15,7 @@ interface Terminal {
 
 const registerCommand = vscode.commands.registerCommand
 
-const init =  async (context) => {
+const init =  async (context: vscode.ExtensionContext) => {
 	let packageJson;
 	try {
 		packageJson = await getPackageJson()
@@ -42,23 +43,32 @@ const init =  async (context) => {
 
 		commands = [...packageJsonCommands]
 	}
-
-		if (commands) {
-			const terminals = [] as [Terminal]
-			commands.forEach(({ command, name, color }: RunButton) => {
+	
+		if (commands.length) {
+			let terminals = [] as Terminal[]
+			commands.forEach(({ command, name, color, singleInstance }: RunButton) => {
 				const vsCommand = `extension.${command.replace(' ', '')}`
 	
-				let disposable = registerCommand(vsCommand, () => {
-					const assocTerminal = terminals.find(el => el.name === vsCommand)
+				let disposable = registerCommand(vsCommand, async () => {
+					const assocTerminal = terminals.find(el => el.name === vsCommand) 
 					if (!assocTerminal) {
 						const terminal = vscode.window.createTerminal()
 						terminal.show(false)
-						terminal.sendText(command)
 						terminals.push({ name: vsCommand, terminal })
+						terminal.sendText(command)						
 					} else {
-						assocTerminal.terminal.show()
-						assocTerminal.terminal.sendText('clear')
-						assocTerminal.terminal.sendText(command)
+						if (singleInstance) {
+							terminals = terminals.filter(el => el.name !== vsCommand) 							
+							assocTerminal.terminal.dispose();
+							const terminal = vscode.window.createTerminal()
+							terminal.show();
+							terminal.sendText(command)
+							terminals.push({ name: vsCommand, terminal })
+						} else {						
+							assocTerminal.terminal.show()
+							assocTerminal.terminal.sendText('clear')
+							assocTerminal.terminal.sendText(command)
+						}
 					}
 				});
 

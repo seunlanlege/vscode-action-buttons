@@ -45,10 +45,32 @@ You can define a custom action to build a rust project like so.
  * Then, type `ctrl + shift + p`, search for `Refresh Action Buttons` and click on it.
  * You Should now see the action buttons on the status bar :).
 
+# Config Options
+
+## singleInstance: boolean default [false]
+	Kills the running associated process and restarts it.
+	
+## Usage
+
+ ```json
+ 	"run": {
+		 "commands": [
+			 {
+				 "name": "Run Cargo",
+				 "singleInstance": true,
+				 "color": "#af565c",
+				 "command": "cargo run",
+			 },
+		 ]
+	 }
+ ```
 
 ## Release Notes
 
-###v0.0.7
+### v0.0.8
+Added `singleInstance` option.
+
+### v0.0.7
 Added support for default Colors
 
 ### v0.0.6
