@@ -6,6 +6,7 @@ interface RunButton {
 	singleInstance?: boolean,
 	name: string,
 	color: string,
+	showTooltip: boolean,
 }
 
 interface Terminal {
@@ -46,7 +47,7 @@ const init =  async (context: vscode.ExtensionContext) => {
 	
 		if (commands.length) {
 			let terminals = [] as Terminal[]
-			commands.forEach(({ command, name, color, singleInstance }: RunButton) => {
+			commands.forEach(({ command, name, color, singleInstance, showTooltip }: RunButton) => {
 				const vsCommand = `extension.${command.replace(' ', '')}`
 	
 				let disposable = registerCommand(vsCommand, async () => {
@@ -74,7 +75,7 @@ const init =  async (context: vscode.ExtensionContext) => {
 
 				context.subscriptions.push(disposable);
 
-				loadButton({ command: vsCommand, name, color })
+				loadButton({ command: vsCommand, name, color, showTooltip })
 			})
 		} else {
       // vscode.window.showInformationMessage('VsCode Action Buttons: You have no run commands ');			
@@ -82,11 +83,16 @@ const init =  async (context: vscode.ExtensionContext) => {
 
 }
 
-function loadButton ({ command, name, color }: RunButton) {
+function loadButton ({ command, name, color, showTooltip }: RunButton) {
 	const runButton = vscode.window.createStatusBarItem(1, 0)
 	runButton.text = name
 	runButton.color = color || "green"
-	runButton.tooltip = "Runs the command specified in your workspace settings"
+	if (showTooltip === true) {
+		runButton.tooltip = "Runs the command specified in your workspace settings"
+	} else {
+		runButton.tooltip = ""
+	}
+	
 	runButton.command = command
 	runButton.show()
 }
