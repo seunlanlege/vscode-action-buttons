@@ -87,10 +87,10 @@ function loadButton ({ command, name, color, showTooltip }: RunButton) {
 	const runButton = vscode.window.createStatusBarItem(1, 0)
 	runButton.text = name
 	runButton.color = color || "green"
-	if (showTooltip === true) {
-		runButton.tooltip = "Runs the command specified in your workspace settings"
-	} else {
+	if (showTooltip === false) {
 		runButton.tooltip = ""
+	} else {
+		runButton.tooltip = "Runs the command specified in your workspace settings"
 	}
 	
 	runButton.command = command
