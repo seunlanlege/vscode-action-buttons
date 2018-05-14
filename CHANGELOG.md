@@ -8,3 +8,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.0.6]
 added support for reading actions from the scripts segment of package.json.
+
+## [0.0.8]
+optionally enable tooltip
