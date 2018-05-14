@@ -4,10 +4,10 @@
     "description": "",
     "version": "0.0.8",
     "publisher": "seunlanlege",
-		"repository": {
-			"type": "git",
-			"url": "https://github.com/SeunLanLege/vscode-action-buttons.git"
-		},
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/SeunLanLege/vscode-action-buttons.git"
+    },
     "engines": {
         "vscode": "^1.13.0"
     },
@@ -19,15 +19,17 @@
     ],
     "main": "./out/src/extension",
     "contributes": {
-        "commands": [{
-            "command": "extension.refreshButtons",
-            "title": "Refresh Action Buttons"
-        }]
+        "commands": [
+            {
+                "command": "extension.refreshButtons",
+                "title": "Refresh Action Buttons"
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
         "compile": "tsc -watch -p ./",
-				"publish": "vsce publish",
+        "publish": "vsce publish",
         "postinstall": "node ./node_modules/vscode/bin/install",
         "test": "node ./node_modules/vscode/bin/test"
     },
