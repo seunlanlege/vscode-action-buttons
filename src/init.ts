@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { getPackageJson } from './packageJson'
+import { getPackageJson } from './packageJson';
 
 interface RunButton {
 	command: string,
@@ -32,7 +32,7 @@ const init =  async (context: vscode.ExtensionContext) => {
 		commands.push(...cmd)
 	}
 
-	if (typeof packageJson !== 'undefined') {
+	if (typeof packageJson !== 'undefined' && !config) {
 		const { scripts } = packageJson
 		let keys = Object.keys(scripts);
 	
