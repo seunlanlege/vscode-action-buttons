@@ -31,7 +31,7 @@ const init = async (context: vscode.ExtensionContext) => {
 	if (commands.length) {
 		const terminals: { [name: string]: vscode.Terminal } = {}
 		commands.forEach(
-			({ command, name, color, singleInstance, showTooltip }: RunButton) => {
+			({ command, name, color, singleInstance }: RunButton) => {
 				const vsCommand = `extension.${name.replace(' ', '')}`
 
 				const disposable = registerCommand(vsCommand, async () => {
@@ -66,7 +66,6 @@ const init = async (context: vscode.ExtensionContext) => {
 					command,
 					name,
 					color: color || defaultColor,
-					showTooltip
 				})
 			}
 		)
