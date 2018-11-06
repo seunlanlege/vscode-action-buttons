@@ -1,100 +1,88 @@
-import * as vscode from 'vscode';
-import { getPackageJson } from './packageJson';
-
-interface RunButton {
-	command: string,
-	singleInstance?: boolean,
-	name: string,
-	color: string,
-	showTooltip: boolean,
-}
-
-interface Terminal {
-	name: string,
-	terminal: vscode.Terminal,
-}
+import { buildConfigFromPackageJson } from './packageJson'
+import * as vscode from 'vscode'
+import { RunButton } from './types'
 
 const registerCommand = vscode.commands.registerCommand
 
-const init =  async (context: vscode.ExtensionContext) => {
-	let packageJson;
-	try {
-		packageJson = await getPackageJson()
-	} catch (e) {
-		console.log('Could Not Read package.json')
-	}
-	const config = vscode.workspace.getConfiguration("run")
-	const defaultColor = config.get("defaultColor")
-	const cmd = config.get("commands") as [RunButton]
-	let commands = [];
+const disposables = []
 
-	if (config) {
-		commands.push(...cmd)
+const init = async (context: vscode.ExtensionContext) => {
+	disposables.forEach(d => d.dispose())
+	const config = vscode.workspace.getConfiguration('actionButtons')
+	const defaultColor = config.get<string>('defaultColor')
+	const cmds = config.get<RunButton[]>('commands')
+	const commands = []
+
+	if (cmds && cmds.length) {
+		commands.push(...cmds)
 	}
 
-	if (typeof packageJson !== 'undefined' && !config) {
-		const { scripts } = packageJson
-		let keys = Object.keys(scripts);
-	
-		const packageJsonCommands = keys.map(key => ({
-			command: `npm run ${key}`,
-			color: defaultColor || 'green',
-			name: key,
-		})) as [RunButton]
+	commands.push(...(await buildConfigFromPackageJson(defaultColor)))
 
-		commands = [...packageJsonCommands]
-	}
-	
-		if (commands.length) {
-			let terminals = [] as Terminal[]
-			commands.forEach(({ command, name, color, singleInstance, showTooltip }: RunButton) => {
-				const vsCommand = `extension.${command.replace(' ', '')}`
-	
-				let disposable = registerCommand(vsCommand, async () => {
-					const assocTerminal = terminals.find(el => el.name === vsCommand) 
+	console.log({ commands })
+
+	if (commands.length) {
+		const terminals: { [name: string]: vscode.Terminal } = {}
+		commands.forEach(
+			({ command, name, color, singleInstance, showTooltip }: RunButton) => {
+				const vsCommand = `extension.${name.replace(' ', '')}`
+
+				const disposable = registerCommand(vsCommand, async () => {
+					const assocTerminal = terminals[vsCommand]
 					if (!assocTerminal) {
-						const terminal = vscode.window.createTerminal()
-						terminal.show(false)
-						terminals.push({ name: vsCommand, terminal })
-						terminal.sendText(command)						
+						const terminal = vscode.window.createTerminal(name)
+						terminal.show(true)
+						terminals[vsCommand] = terminal
+						terminal.sendText(command)
 					} else {
 						if (singleInstance) {
-							terminals = terminals.filter(el => el.name !== vsCommand) 							
-							assocTerminal.terminal.dispose();
-							const terminal = vscode.window.createTerminal()
-							terminal.show();
+							delete terminals[vsCommand]
+							assocTerminal.dispose()
+							const terminal = vscode.window.createTerminal(name)
+							terminal.show(true)
 							terminal.sendText(command)
-							terminals.push({ name: vsCommand, terminal })
-						} else {						
-							assocTerminal.terminal.show()
-							assocTerminal.terminal.sendText('clear')
-							assocTerminal.terminal.sendText(command)
+							terminals[vsCommand] = terminal
+						} else {
+							assocTerminal.show()
+							assocTerminal.sendText('clear')
+							assocTerminal.sendText(command)
 						}
 					}
-				});
+				})
 
-				context.subscriptions.push(disposable);
+				context.subscriptions.push(disposable)
 
-				loadButton({ command: vsCommand, name, color, showTooltip })
-			})
-		} else {
-      // vscode.window.showInformationMessage('VsCode Action Buttons: You have no run commands ');			
-		}
+				disposables.push(disposable)
 
+				loadButton({
+					vsCommand,
+					command,
+					name,
+					color: color || defaultColor,
+					showTooltip
+				})
+			}
+		)
+	} else {
+		vscode.window.showInformationMessage(
+			'VsCode Action Buttons: You have no run commands '
+		)
+	}
 }
 
-function loadButton ({ command, name, color, showTooltip }: RunButton) {
+function loadButton({ command, name, color, showTooltip, vsCommand }: RunButton) {
 	const runButton = vscode.window.createStatusBarItem(1, 0)
 	runButton.text = name
-	runButton.color = color || "green"
+	runButton.color = color || 'green'
 	if (showTooltip === false) {
-		runButton.tooltip = ""
+		runButton.tooltip = ''
 	} else {
-		runButton.tooltip = "Runs the command specified in your workspace settings"
+		runButton.tooltip = command
 	}
-	
-	runButton.command = command
+
+	runButton.command = vsCommand
 	runButton.show()
+	disposables.push(runButton)
 }
 
-export default init;
+export default init

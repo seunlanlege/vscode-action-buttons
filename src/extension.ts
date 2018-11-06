@@ -1,20 +1,17 @@
-'use strict';
-import * as vscode from 'vscode';
+'use strict'
+import * as vscode from 'vscode'
 import init from './init'
 
-
 export function activate(context: vscode.ExtensionContext) {
-		init(context);
+	init(context)
 
-    let disposable = vscode.commands.registerCommand('extension.refreshButtons', () => {
-			init(context);				
-    });
+	let disposable = vscode.commands.registerCommand(
+		'extension.refreshButtons',
+		() => init(context)
+	)
 
-    context.subscriptions.push(disposable);
+	context.subscriptions.push(disposable)
 }
-
-
 
 // this method is called when your extension is deactivated
-export function deactivate() {
-}
+export function deactivate() {}

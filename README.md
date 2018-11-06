@@ -20,12 +20,13 @@ You can define a custom action to build a rust project like so.
  - [x] Now Reload.
 
  ```json
- 	"run": {
+ 	"actionButton": {
 		 "defaultColor": "#ff0034", // Can also use string color names.
 		 "commands": [
 			 {
 				 "name": "Run Cargo",
 				 "color": "green",
+				 "singleInstance": true,
 				 "command": "cargo run", // This is executed in the terminal.
 			 },
 			 {
@@ -53,7 +54,7 @@ You can define a custom action to build a rust project like so.
 ## Usage
 
  ```json
- 	"run": {
+ 	"actionButtons": {
 		 "commands": [
 			 {
 				 "name": "Run Cargo",
@@ -66,6 +67,10 @@ You can define a custom action to build a rust project like so.
  ```
 
 ## Release Notes
+
+### v1.0.0
+Changed configuration name from `run` to `actionButton`
+Better support for js projects
 
 ### v0.0.8
 Added `singleInstance` option.

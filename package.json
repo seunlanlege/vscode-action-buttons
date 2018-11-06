@@ -1,43 +1,83 @@
 {
-    "name": "action-buttons",
-    "displayName": "VsCode Action Buttons",
-    "description": "",
-    "version": "0.0.9",
-    "publisher": "seunlanlege",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/SeunLanLege/vscode-action-buttons.git"
-    },
-    "engines": {
-        "vscode": "^1.13.0"
-    },
-    "categories": [
-        "Other"
-    ],
-    "activationEvents": [
-        "*"
-    ],
-    "main": "./out/src/extension",
-    "contributes": {
-        "commands": [
-            {
-                "command": "extension.refreshButtons",
-                "title": "Refresh Action Buttons"
-            }
-        ]
-    },
-    "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "publish": "vsce publish",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
-        "mocha": "^2.3.3",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
-    }
+	"name": "action-buttons",
+	"displayName": "VsCode Action Buttons",
+	"description": "",
+	"version": "1.0.0",
+	"publisher": "seunlanlege",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/SeunLanLege/vscode-action-buttons.git"
+	},
+	"engines": {
+		"vscode": "^1.27.2"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./out/src/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.refreshButtons",
+				"title": "Refresh Action Buttons"
+			}
+		],
+		"configuration": {
+			"type": "object",
+			"title": "VsCode Action Buttons",
+			"properties": {
+				"actionButtons": {
+					"type": "object",
+					"properties": {
+						"commands": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"command": {
+										"type": "string",
+										"required": false
+									},
+									"singleInstance": {
+										"type": "boolean"
+									},
+									"name": {
+										"type": "string"
+									},
+									"color": {
+										"type": "string",
+										"required": false
+									},
+									"showTooltip": {
+										"type": "boolean"
+									}
+								}
+							}
+						},
+						"defaultColor": {
+							"type": "string",
+							"required": false
+						}
+					}
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "tsc -p ./",
+		"compile": "tsc -watch -p ./",
+		"publish": "vsce publish",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "node ./node_modules/vscode/bin/test"
+	},
+	"devDependencies": {
+		"typescript": "^2.0.3",
+		"vscode": "^1.0.0",
+		"mocha": "^2.3.3",
+		"@types/node": "^6.0.40",
+		"@types/mocha": "^2.2.32"
+	}
 }
