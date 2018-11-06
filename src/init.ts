@@ -13,6 +13,13 @@ const init = async (context: vscode.ExtensionContext) => {
 	const cmds = config.get<RunButton[]>('commands')
 	const commands = []
 
+	loadButton({
+		vsCommand: 'extension.refreshButtons',
+		name: 'Refresh Action Buttons',
+		color: 'green',
+		command: 'Refreshes the action buttons, after modifying the config'
+	})
+
 	if (cmds && cmds.length) {
 		commands.push(...cmds)
 	}
@@ -70,15 +77,16 @@ const init = async (context: vscode.ExtensionContext) => {
 	}
 }
 
-function loadButton({ command, name, color, showTooltip, vsCommand }: RunButton) {
+function loadButton({
+	command,
+	name,
+	color,
+	vsCommand
+}: RunButton) {
 	const runButton = vscode.window.createStatusBarItem(1, 0)
 	runButton.text = name
 	runButton.color = color || 'green'
-	if (showTooltip === false) {
-		runButton.tooltip = ''
-	} else {
-		runButton.tooltip = command
-	}
+	runButton.tooltip = command
 
 	runButton.command = vsCommand
 	runButton.show()

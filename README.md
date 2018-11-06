@@ -43,7 +43,7 @@ You can define a custom action to build a rust project like so.
  If you open an existing project and want to set up action buttons for that workspace.
 
  * Define the action buttons in your workspace settings.
- * Then, type `ctrl + shift + p`, search for `Refresh Action Buttons` and click on it.
+ * Then, click on `Refresh Action Buttons` in the status bar
  * You Should now see the action buttons on the status bar :).
 
 # Config Options
@@ -67,6 +67,9 @@ You can define a custom action to build a rust project like so.
  ```
 
 ## Release Notes
+
+### v1.1.0
+added `Refresh Action Buttons` action button
 
 ### v1.0.0
 Changed configuration name from `run` to `actionButton`
