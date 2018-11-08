@@ -2,7 +2,7 @@ import { RunButton } from './types'
 import { workspace } from 'vscode'
 
 export const getPackageJson = async (): Promise<any> =>
-	new Promise((resolve, reject) => {
+	new Promise(resolve => {
 		const cwd = workspace.rootPath
 
 		try {
@@ -10,7 +10,7 @@ export const getPackageJson = async (): Promise<any> =>
 
 			resolve(packageJson)
 		} catch (e) {
-			reject(e)
+			resolve()
 		}
 	})
 
