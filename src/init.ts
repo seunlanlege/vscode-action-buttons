@@ -15,9 +15,9 @@ const init = async (context: vscode.ExtensionContext) => {
 
 	loadButton({
 		vsCommand: 'extension.refreshButtons',
-		name: 'Refresh Action Buttons',
+		name: '↻',
 		color: 'green',
-		command: 'Refreshes the action buttons, after modifying the config'
+		command: 'Refreshes the action buttons'
 	})
 
 	if (cmds && cmds.length) {
