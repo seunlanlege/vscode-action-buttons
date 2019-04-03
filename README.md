@@ -20,7 +20,7 @@ You can define a custom action to build a rust project like so.
  - [x] Now Reload.
 
  ```json
- 	"actionButton": {
+ 	"actionButtons": {
 		 "defaultColor": "#ff0034", // Can also use string color names.
 		 "commands": [
 			 {
