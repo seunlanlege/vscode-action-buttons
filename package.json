@@ -57,6 +57,10 @@
 						"defaultColor": {
 							"type": "string",
 							"required": false
+						},
+						"loadNpmCommands":{
+							"type": "boolean",
+							"required": false
 						}
 					}
 				}
@@ -73,7 +77,7 @@
 	"devDependencies": {
 		"@types/mocha": "^2.2.32",
 		"@types/node": "^6.0.40",
-		"mocha": "^2.3.3",
+		"mocha": "^6.1.4",
 		"typescript": "^2.0.3",
 		"vscode": "^1.0.0"
 	}

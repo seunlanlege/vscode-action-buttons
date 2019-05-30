@@ -10,13 +10,14 @@ const init = async (context: vscode.ExtensionContext) => {
 	disposables.forEach(d => d.dispose())
 	const config = vscode.workspace.getConfiguration('actionButtons')
 	const defaultColor = config.get<string>('defaultColor')
+	const loadNpmCommands = config.get<boolean>('loadNpmCommands')
 	const cmds = config.get<RunButton[]>('commands')
 	const commands = []
 
 	loadButton({
 		vsCommand: 'extension.refreshButtons',
 		name: '↻',
-		color: 'green',
+		color: defaultColor || 'white',
 		command: 'Refreshes the action buttons'
 	})
 
@@ -24,7 +25,7 @@ const init = async (context: vscode.ExtensionContext) => {
 		commands.push(...cmds)
 	}
 
-	commands.push(...(await buildConfigFromPackageJson(defaultColor)))
+	if (loadNpmCommands!==false) commands.push(...(await buildConfigFromPackageJson(defaultColor)))
 
 	console.log({ commands })
 
@@ -84,7 +85,7 @@ function loadButton({
 }: RunButton) {
 	const runButton = vscode.window.createStatusBarItem(1, 0)
 	runButton.text = name
-	runButton.color = color || 'green'
+	runButton.color = color || 'white'
 	runButton.tooltip = command
 
 	runButton.command = vsCommand
