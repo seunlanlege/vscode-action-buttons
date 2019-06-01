@@ -43,7 +43,7 @@
 									},
 									"command": {
 										"type": "string",
-										"required": false
+										"required": true
 									},
 									"singleInstance": {
 										"type": "boolean"
