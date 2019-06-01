@@ -25,6 +25,7 @@ You can define a custom action to build a rust project like so.
 		 "loadNpmCommands":false, // Disables automatic generation of actions for npm commands.
 		 "commands": [
 			 {
+				 "cwd": "/home/custom_folder", 	// Terminal initial folder ${workspaceFolder} and os user home as defaults
 				 "name": "Run Cargo",
 				 "color": "green",
 				 "singleInstance": true,
@@ -72,6 +73,7 @@ You can define a custom action to build a rust project like so.
 
 ### v1.1.4
 Added support for VSCode predefined variables as ${file}
+Added `cwd` option.
 
 ### v1.1.3
 Added `loadNpmCommands` option.
