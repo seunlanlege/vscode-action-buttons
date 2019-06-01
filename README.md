@@ -22,17 +22,18 @@ You can define a custom action to build a rust project like so.
  ```json
  	"actionButtons": {
 		 "defaultColor": "#ff0034", // Can also use string color names.
+		 "loadNpmCommands":false, // Disables automatic generation of actions for npm commands.
 		 "commands": [
 			 {
 				 "name": "Run Cargo",
 				 "color": "green",
 				 "singleInstance": true,
-				 "command": "cargo run", // This is executed in the terminal.
+				 "command": "cargo run ${file}", // This is executed in the terminal.
 			 },
 			 {
 				 "name": "Build Cargo",
 				 "color": "green",
-				 "command": "cargo build",
+				 "command": "cargo build ${file}",
 			 }
 		 ]
 	 }
@@ -55,12 +56,13 @@ You can define a custom action to build a rust project like so.
 
  ```json
  	"actionButtons": {
+		 "loadNpmCommands": false,
 		 "commands": [
 			 {
 				 "name": "Run Cargo",
 				 "singleInstance": true,
 				 "color": "#af565c",
-				 "command": "cargo run",
+				 "command": "cargo run ${file}",
 			 },
 		 ]
 	 }
@@ -68,8 +70,17 @@ You can define a custom action to build a rust project like so.
 
 ## Release Notes
 
+### v1.1.4
+Added support for VSCode predefined variables as ${file}
+
+### v1.1.3
+Added `loadNpmCommands` option.
+
+### v1.1.2
+
+
 ### v1.1.0
-added `Refresh Action Buttons` action button
+Added `Refresh Action Buttons` action button
 
 ### v1.0.0
 Changed configuration name from `run` to `actionButton`
