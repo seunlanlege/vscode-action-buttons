@@ -65,10 +65,11 @@ const init = async (context: vscode.ExtensionContext) => {
 
 						// - the current opened file's extension
 						fileExtname: (vscode.window.activeTextEditor) ? path.parse(path.basename(vscode.window.activeTextEditor.document.fileName)).ext : null,
-						/*
-							// - the task runner's current working directory on startup
-							cwd:
-						*/
+						
+						// - the task runner's current working directory on startup
+						cwd: process.cwd(),
+						
+						//- the current selected line number in the active file
 						lineNumber: (vscode.window.activeTextEditor) ? vscode.window.activeTextEditor.selection.active.line + 1 : null,
 
 						// - the current selected text in the active file
