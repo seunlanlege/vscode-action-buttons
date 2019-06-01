@@ -33,23 +33,23 @@ const init = async (context: vscode.ExtensionContext) => {
 	if (commands.length) {
 		const terminals: { [name: string]: vscode.Terminal } = {}
 		commands.forEach(
-			({ command, name, color, singleInstance }: RunButton) => {
+			({ cwd, command, name, color, singleInstance }: RunButton) => {
 				const vsCommand = `extension.${name.replace(' ', '')}`
 
 				const disposable = registerCommand(vsCommand, async () => {
 					const vars = {
 
 						// - the path of the folder opened in VS Code
-						workspaceFolder: (vscode.workspace)? vscode.workspace.rootPath : null,
+						workspaceFolder: vscode.workspace.rootPath,
 
 						// - the name of the folder opened in VS Code without any slashes (/)
-						workspaceFolderBasename: (vscode.workspace)? path.basename(vscode.workspace.rootPath) : null,
+						workspaceFolderBasename: (vscode.workspace.rootPath)? path.basename(vscode.workspace.rootPath) : null,
 
 						// - the current opened file
 						file: (vscode.window.activeTextEditor) ? vscode.window.activeTextEditor.document.fileName : null,
 
 						// - the current opened file relative to workspaceFolder
-						relativeFile: (vscode.window.activeTextEditor) ? path.relative(
+						relativeFile: (vscode.window.activeTextEditor && vscode.workspace.rootPath) ? path.relative(
 							vscode.workspace.rootPath,
 							vscode.window.activeTextEditor.document.fileName
 						) : null,
@@ -67,7 +67,7 @@ const init = async (context: vscode.ExtensionContext) => {
 						fileExtname: (vscode.window.activeTextEditor) ? path.parse(path.basename(vscode.window.activeTextEditor.document.fileName)).ext : null,
 						
 						// - the task runner's current working directory on startup
-						cwd: process.cwd(),
+						cwd: cwd || vscode.workspace.rootPath ||  require('os').homedir(), 
 						
 						//- the current selected line number in the active file
 						lineNumber: (vscode.window.activeTextEditor) ? vscode.window.activeTextEditor.selection.active.line + 1 : null,
@@ -78,12 +78,11 @@ const init = async (context: vscode.ExtensionContext) => {
 						// - the path to the running VS Code executable
 						execPath: process.execPath
 
-
 					}
 
 					const assocTerminal = terminals[vsCommand]
 					if (!assocTerminal) {
-						const terminal = vscode.window.createTerminal(name)
+						const terminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
 						terminal.show(true)
 						terminals[vsCommand] = terminal
 						terminal.sendText(interpolateString(command, vars))
@@ -91,7 +90,7 @@ const init = async (context: vscode.ExtensionContext) => {
 						if (singleInstance) {
 							delete terminals[vsCommand]
 							assocTerminal.dispose()
-							const terminal = vscode.window.createTerminal(name)
+							const terminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
 							terminal.show(true)
 							terminal.sendText(interpolateString(command, vars))
 							terminals[vsCommand] = terminal

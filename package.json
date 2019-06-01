@@ -37,6 +37,10 @@
 							"items": {
 								"type": "object",
 								"properties": {
+									"cwd": {
+										"type": "string",
+										"required": false
+									},
 									"command": {
 										"type": "string",
 										"required": false
