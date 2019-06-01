@@ -16,12 +16,23 @@ const init = async (context: vscode.ExtensionContext) => {
 	const cmds = config.get<RunButton[]>('commands')
 	const commands = []
 
-	loadButton({
-		vsCommand: 'extension.refreshButtons',
-		name: reloadButton || '↻',
-		color: defaultColor || 'white',
-		command: 'Refreshes the action buttons'
-	})
+	if (reloadButton !== null) {
+		loadButton({
+			vsCommand: 'extension.refreshButtons',
+			name: reloadButton || '↻',
+			color: defaultColor || 'white',
+			command: 'Refreshes the action buttons'
+		})
+	}
+	else {
+		const onCfgChange:vscode.Disposable = vscode.workspace.onDidChangeConfiguration(e => {
+			if (e.affectsConfiguration('actionButtons')) {
+				vscode.commands.executeCommand('extension.refreshButtons');
+			}
+		});
+		context.subscriptions.push(onCfgChange)
+		disposables.push(onCfgChange);
+	}
 
 	if (cmds && cmds.length) {
 		commands.push(...cmds)

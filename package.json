@@ -63,7 +63,10 @@
 							"required": false
 						},
 						"reloadButton": {
-							"type": "string",
+							"type": [
+								"string",
+								"null"
+							],
 							"required": false
 						},
 						"loadNpmCommands": {
