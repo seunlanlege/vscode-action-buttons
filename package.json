@@ -62,6 +62,10 @@
 							"type": "string",
 							"required": false
 						},
+						"reloadButton": {
+							"type": "string",
+							"required": false
+						},
 						"loadNpmCommands": {
 							"type": "boolean",
 							"required": false

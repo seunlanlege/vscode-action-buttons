@@ -11,13 +11,14 @@ const init = async (context: vscode.ExtensionContext) => {
 	disposables.forEach(d => d.dispose())
 	const config = vscode.workspace.getConfiguration('actionButtons')
 	const defaultColor = config.get<string>('defaultColor')
+	const reloadButton = config.get<string>('reloadButton')
 	const loadNpmCommands = config.get<boolean>('loadNpmCommands')
 	const cmds = config.get<RunButton[]>('commands')
 	const commands = []
 
 	loadButton({
 		vsCommand: 'extension.refreshButtons',
-		name: '↻',
+		name: reloadButton || '↻',
 		color: defaultColor || 'white',
 		command: 'Refreshes the action buttons'
 	})

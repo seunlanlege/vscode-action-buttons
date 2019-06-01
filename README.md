@@ -23,6 +23,7 @@ You can define a custom action to build a rust project like so.
  	"actionButtons": {
 		 "defaultColor": "#ff0034", // Can also use string color names.
 		 "loadNpmCommands":false, // Disables automatic generation of actions for npm commands.
+		 "reloadButton":"♻️", // Custom reload button text or icon (default ↻)
 		 "commands": [
 			 {
 				 "cwd": "/home/custom_folder", 	// Terminal initial folder ${workspaceFolder} and os user home as defaults
@@ -74,6 +75,7 @@ You can define a custom action to build a rust project like so.
 ### v1.1.4
 Added support for VSCode predefined variables as ${file}
 Added `cwd` option.
+Added `reloadButton` option.
 
 ### v1.1.3
 Added `loadNpmCommands` option.
