@@ -77,10 +77,10 @@ const init = async (context: vscode.ExtensionContext) => {
 
 						// - the current opened file's extension
 						fileExtname: (vscode.window.activeTextEditor) ? path.parse(path.basename(vscode.window.activeTextEditor.document.fileName)).ext : null,
-						
+
 						// - the task runner's current working directory on startup
-						cwd: cwd || vscode.workspace.rootPath ||  require('os').homedir(), 
-						
+						cwd: cwd || vscode.workspace.rootPath ||  require('os').homedir(),
+
 						//- the current selected line number in the active file
 						lineNumber: (vscode.window.activeTextEditor) ? vscode.window.activeTextEditor.selection.active.line + 1 : null,
 
@@ -92,26 +92,22 @@ const init = async (context: vscode.ExtensionContext) => {
 
 					}
 
-					const assocTerminal = terminals[vsCommand]
+					let assocTerminal = terminals[vsCommand]
 					if (!assocTerminal) {
-						const terminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
-						terminal.show(true)
-						terminals[vsCommand] = terminal
-						terminal.sendText(interpolateString(command, vars))
+						assocTerminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
+						terminals[vsCommand] = assocTerminal;
 					} else {
 						if (singleInstance) {
-							delete terminals[vsCommand]
-							assocTerminal.dispose()
+							delete terminals[vsCommand];
+							assocTerminal.dispose();
 							const terminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
-							terminal.show(true)
-							terminal.sendText(interpolateString(command, vars))
-							terminals[vsCommand] = terminal
+							terminals[vsCommand] = terminal;
 						} else {
-							assocTerminal.show()
-							assocTerminal.sendText('clear')
-							assocTerminal.sendText(interpolateString(command, vars))
+							assocTerminal.sendText('clear');
 						}
 					}
+					assocTerminal.show(!focus);
+					assocTerminal.sendText(interpolateString(command, vars));
 				})
 
 				context.subscriptions.push(disposable)
