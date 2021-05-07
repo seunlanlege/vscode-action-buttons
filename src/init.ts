@@ -45,7 +45,7 @@ const init = async (context: vscode.ExtensionContext) => {
 	if (commands.length) {
 		const terminals: { [name: string]: vscode.Terminal } = {}
 		commands.forEach(
-			({ cwd, command, name, color, singleInstance }: RunButton) => {
+			({ cwd, command, name, color, singleInstance, api }: RunButton) => {
 				const vsCommand = `extension.${name.replace(' ', '')}`
 
 				const disposable = registerCommand(vsCommand, async () => {
@@ -91,25 +91,30 @@ const init = async (context: vscode.ExtensionContext) => {
 						execPath: process.execPath
 
 					}
-
-					const assocTerminal = terminals[vsCommand]
-					if (!assocTerminal) {
-						const terminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
-						terminal.show(true)
-						terminals[vsCommand] = terminal
-						terminal.sendText(interpolateString(command, vars))
-					} else {
-						if (singleInstance) {
-							delete terminals[vsCommand]
-							assocTerminal.dispose()
+					
+					if (api) {
+						vscode.commands.executeCommand(command);
+					}
+					else {
+						const assocTerminal = terminals[vsCommand]
+						if (!assocTerminal) {
 							const terminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
 							terminal.show(true)
-							terminal.sendText(interpolateString(command, vars))
 							terminals[vsCommand] = terminal
+							terminal.sendText(interpolateString(command, vars))
 						} else {
-							assocTerminal.show()
-							assocTerminal.sendText('clear')
-							assocTerminal.sendText(interpolateString(command, vars))
+							if (singleInstance) {
+								delete terminals[vsCommand]
+								assocTerminal.dispose()
+								const terminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
+								terminal.show(true)
+								terminal.sendText(interpolateString(command, vars))
+								terminals[vsCommand] = terminal
+							} else {
+								assocTerminal.show()
+								assocTerminal.sendText('clear')
+								assocTerminal.sendText(interpolateString(command, vars))
+							}
 						}
 					}
 				})
