@@ -2,6 +2,12 @@
 
 This allows you to define custom actions such as `run` or `build` and append them to a status bar button in vscode.
 
+## NEW!
+
+You can now execute Visual Studio API commands through action buttons!
+
+![](api_call.png)
+
 ## Features
 
 You can define a custom action to build a rust project like so.
@@ -72,6 +78,10 @@ You can define a custom action to build a rust project like so.
  ```
 
 ## Release Notes
+
+### v1.1.5
+Added support for VSCode API calls
+Added `api` option.
 
 ### v1.1.4
 Added support for VSCode predefined variables as ${file}
