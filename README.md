@@ -53,7 +53,10 @@ You can define a custom action to build a rust project like so.
 
 ## singleInstance: boolean default [false]
 	Kills the running associated process and restarts it.
-	
+
+## focus: boolean default [false]
+    Focus the terminal after running the command
+
 ## Usage
 
  ```json
