@@ -1,7 +1,7 @@
 import { RunButton } from './types'
 import { workspace } from 'vscode'
 
-export const getPackageJson = async (): Promise<any> =>
+export const getPackageJson = async (): Promise<undefined | any> =>
 	new Promise(resolve => {
 		const cwd = workspace.rootPath
 
@@ -10,7 +10,7 @@ export const getPackageJson = async (): Promise<any> =>
 
 			resolve(packageJson)
 		} catch (e) {
-			resolve()
+			resolve(undefined)
 		}
 	})
 

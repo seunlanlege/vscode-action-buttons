@@ -40,8 +40,6 @@ const init = async (context: vscode.ExtensionContext) => {
 
 	if (loadNpmCommands !== false) commands.push(...(await buildConfigFromPackageJson(defaultColor)))
 
-	console.log({ commands })
-
 	if (commands.length) {
 		const terminals: { [name: string]: vscode.Terminal } = {}
 		commands.forEach(
