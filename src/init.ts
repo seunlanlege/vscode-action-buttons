@@ -45,7 +45,7 @@ const init = async (context: vscode.ExtensionContext) => {
 	if (commands.length) {
 		const terminals: { [name: string]: vscode.Terminal } = {}
 		commands.forEach(
-			({ cwd, command, name, color, singleInstance, focus }: RunButton) => {
+			({ cwd, command, name, color, singleInstance, focus, useVsCodeApi }: RunButton) => {
 				const vsCommand = `extension.${name.replace(' ', '')}`
 
 				const disposable = registerCommand(vsCommand, async () => {
@@ -89,25 +89,28 @@ const init = async (context: vscode.ExtensionContext) => {
 
 						// - the path to the running VS Code executable
 						execPath: process.execPath
-
 					}
 
-					let assocTerminal = terminals[vsCommand]
-					if (!assocTerminal) {
-						assocTerminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
-						terminals[vsCommand] = assocTerminal;
+					if (useVsCodeApi) {
+						vscode.commands.executeCommand(command);
 					} else {
-						if (singleInstance) {
-							delete terminals[vsCommand];
-							assocTerminal.dispose();
-							const terminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
-							terminals[vsCommand] = terminal;
+						let assocTerminal = terminals[vsCommand]
+						if (!assocTerminal) {
+							assocTerminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
+							terminals[vsCommand] = assocTerminal;
 						} else {
-							assocTerminal.sendText('clear');
+							if (singleInstance) {
+								delete terminals[vsCommand];
+								assocTerminal.dispose();
+								const terminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
+								terminals[vsCommand] = terminal;
+							} else {
+								assocTerminal.sendText('clear');
+							}
 						}
+						assocTerminal.show(!focus);
+						assocTerminal.sendText(interpolateString(command, vars));
 					}
-					assocTerminal.show(!focus);
-					assocTerminal.sendText(interpolateString(command, vars));
 				})
 
 				context.subscriptions.push(disposable)

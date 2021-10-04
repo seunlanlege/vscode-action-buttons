@@ -6,4 +6,5 @@ export interface RunButton {
 	name: string
 	color: string
 	focus?: string
+	useVsCodeApi?: boolean
 }
