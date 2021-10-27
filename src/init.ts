@@ -102,8 +102,8 @@ const init = async (context: vscode.ExtensionContext) => {
 							if (singleInstance) {
 								delete terminals[vsCommand];
 								assocTerminal.dispose();
-								const terminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
-								terminals[vsCommand] = terminal;
+								assocTerminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
+								terminals[vsCommand] = assocTerminal;
 							} else {
 								assocTerminal.sendText('clear');
 							}
