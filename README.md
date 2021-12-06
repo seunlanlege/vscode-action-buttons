@@ -78,6 +78,8 @@ Add customizable buttons to the status bar to execute actions or tasks in VS Cod
     * Focus the terminal after executing the command. Defaults to `false`. Only valid when `useVsCodeApi` is `false`
 * **useVsCodeApi**
     * Specifies whether to execute a VS Code command or terminal command. Defaults to `false`.
+* **args**
+    * Specifies additional arguments to pass to VS Code command. Only valid when `useVsCodeApi` is `true`.
 
 ## Usage
 
