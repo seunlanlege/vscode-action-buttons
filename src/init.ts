@@ -77,7 +77,7 @@ const init = async (context: vscode.ExtensionContext) => {
 						fileExtname: (vscode.window.activeTextEditor) ? path.parse(path.basename(vscode.window.activeTextEditor.document.fileName)).ext : null,
 
 						// - the task runner's current working directory on startup
-						cwd: cwd || vscode.workspace.rootPath ||  require('os').homedir(),
+						cwd: cwd || vscode.workspace.rootPath || require('os').homedir(),
 
 						//- the current selected line number in the active file
 						lineNumber: (vscode.window.activeTextEditor) ? vscode.window.activeTextEditor.selection.active.line + 1 : null,
