@@ -90,7 +90,7 @@ const init = async (context: vscode.ExtensionContext) => {
 					}
 
 					if (useVsCodeApi) {
-						vscode.commands.executeCommand(command, ...args);
+						vscode.commands.executeCommand(command, ...(args || []));
 					} else {
 						let assocTerminal = terminals[vsCommand]
 						if (!assocTerminal) {
