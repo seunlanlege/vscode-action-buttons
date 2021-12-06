@@ -19,8 +19,8 @@ const init = async (context: vscode.ExtensionContext) => {
 	if (reloadButton !== null) {
 		loadButton({
 			vsCommand: 'extension.refreshButtons',
-			name: reloadButton || '↻',
-			color: defaultColor || 'white',
+			name: reloadButton,
+			color: defaultColor,
 			command: 'Refreshes the action buttons'
 		})
 	}
@@ -139,7 +139,7 @@ function loadButton({
 }: RunButton) {
 	const runButton = vscode.window.createStatusBarItem(1, 0)
 	runButton.text = name
-	runButton.color = color || 'white'
+	runButton.color = color
 	runButton.tooltip = command
 
 	runButton.command = vsCommand
