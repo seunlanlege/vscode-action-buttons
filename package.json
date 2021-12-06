@@ -86,6 +86,14 @@
 										"type": "boolean",
 										"default": false,
 										"markdownDescription": "Specifies whether to execute a VS Code command or terminal command"
+									},
+									"args": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"default": [],
+										"markdownDescription": "List of arguments passed to VS Code command\n\nOnly valid when `useVsCodeApi` is `true`"
 									}
 								}
 							}
