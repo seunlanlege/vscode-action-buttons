@@ -52,6 +52,8 @@ You can define a custom action to build a rust project like so.
  ```
  ([List of VSCommands](https://gist.github.com/skfarhat/4e88ef386c93b9dceb98121d9457edbf) )
 
+https://code.visualstudio.com/api/references/icons-in-labels
+
  # Alternatively
 
  If you open an existing project and want to set up action buttons for that workspace.
@@ -102,7 +104,7 @@ As seen in the previous example, vars such as `${file}` can be used. Below is a 
 * `selectedText` - the current selected text in the active file
 * `execPath` - the path to the running VS Code executable
 
-## Release Notes
+# Release Notes
 
 ### v1.1.5
 Added support for VSCode API calls
