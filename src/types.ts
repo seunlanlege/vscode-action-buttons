@@ -5,6 +5,6 @@ export interface RunButton {
 	singleInstance?: boolean
 	name: string
 	color: string
-	focus?: string
+	focus?: boolean
 	useVsCodeApi?: boolean
 }
