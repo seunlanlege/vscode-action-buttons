@@ -3,6 +3,7 @@ export interface CommandOpts {
 	command: string
 	singleInstance?: boolean
 	name: string
+	tooltip: string
 	color: string
 	focus?: boolean
 	useVsCodeApi?: boolean

@@ -1,6 +1,6 @@
 import { buildConfigFromPackageJson } from './packageJson'
 import * as vscode from 'vscode'
-import { CommandOpts } from './types'
+import { ButtonOpts, CommandOpts } from './types'
 import * as path from 'path'
 
 const registerCommand = vscode.commands.registerCommand
@@ -14,14 +14,14 @@ const init = async (context: vscode.ExtensionContext) => {
 	const reloadButton = config.get<string>('reloadButton')
 	const loadNpmCommands = config.get<boolean>('loadNpmCommands')
 	const cmds = config.get<CommandOpts[]>('commands')
-	const commands = []
+	const commands: CommandOpts[] = []
 
 	if (reloadButton !== null) {
 		loadButton({
-			vsCommand: 'extension.refreshButtons',
+			command: 'extension.refreshButtons',
 			name: reloadButton,
-			color: defaultColor,
-			command: 'Refreshes the action buttons'
+			tooltip: 'Refreshes the action buttons',
+			color: defaultColor
 		})
 	}
 	else {
@@ -43,7 +43,7 @@ const init = async (context: vscode.ExtensionContext) => {
 	if (commands.length) {
 		const terminals: { [name: string]: vscode.Terminal } = {}
 		commands.forEach(
-			({ cwd, command, name, color, singleInstance, focus, useVsCodeApi }: CommandOpts) => {
+			({ cwd, command, name, tooltip, color, singleInstance, focus, useVsCodeApi }: CommandOpts) => {
 				const vsCommand = `extension.${name.replace(' ', '')}`
 
 				const disposable = registerCommand(vsCommand, async () => {
@@ -116,9 +116,9 @@ const init = async (context: vscode.ExtensionContext) => {
 				disposables.push(disposable)
 
 				loadButton({
-					vsCommand,
-					command,
+					command: vsCommand,
 					name,
+					tooltip: tooltip || command,
 					color: color || defaultColor,
 				})
 			}
@@ -134,15 +134,15 @@ const init = async (context: vscode.ExtensionContext) => {
 function loadButton({
 	command,
 	name,
+	tooltip,
 	color,
-	vsCommand
-}: CommandOpts) {
+}: ButtonOpts) {
 	const runButton = vscode.window.createStatusBarItem(1, 0)
 	runButton.text = name
 	runButton.color = color
-	runButton.tooltip = command
+	runButton.tooltip = tooltip
 
-	runButton.command = vsCommand
+	runButton.command = command
 	runButton.show()
 	disposables.push(runButton)
 }
