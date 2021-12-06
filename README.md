@@ -52,11 +52,32 @@ Add customizable buttons to the status bar to execute actions or tasks in VS Cod
 
 ## Config Options
 
-### singleInstance: boolean default [false]
-	Kills the running associated process and restarts it.
+* **reloadButton**
+    * Text for reload actions button. Defaults to `↻`. If null, the reload button is disabled.
+* **defaultColor**
+    * Default text color of action buttons. Defaults to `white`.
+* **loadNpmCommands**
+    * Whether or not to automatically generate action buttons from commands specified in `package.json`. Defaults to `false`.
+* **commands**
+    * List of action buttons to add to the status bar. Defaults to `[]`. See below for a list of valid options for each command
 
-### focus: boolean default [false]
-    Focus the terminal after running the command
+### Command Options
+
+* **name**
+    * Name of the action button. This field is required.
+* **command**
+    * Command to execute when action is activated. This field is required.
+	* If `useVsCodeApi` is `true`, this is the VS Code command to execute. Otherwise, this specifies the command to execute in the terminal
+* **color**
+    * Specifies the action button text color. Defaults to `defaultColor`.
+* **cwd**
+    * Start directory when executing terminal command. Defaults to `${workspaceFolder}`. Only valid when `useVsCodeApi` is `false`
+* **singleInstance**
+    * Reopen associated terminal each time this action is activated. Defaults to `false`. Only valid when `useVsCodeApi` is `false`
+* **focus**
+    * Focus the terminal after executing the command. Defaults to `false`. Only valid when `useVsCodeApi` is `false`
+* **useVsCodeApi**
+    * Specifies whether to execute a VS Code command or terminal command. Defaults to `false`.
 
 ## Usage
 
