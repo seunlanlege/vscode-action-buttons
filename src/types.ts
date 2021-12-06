@@ -1,7 +1,6 @@
-export interface RunButton {
+export interface CommandOpts {
 	cwd?: string
 	command: string
-	vsCommand: string
 	singleInstance?: boolean
 	name: string
 	color: string

@@ -1,4 +1,4 @@
-import { RunButton } from './types'
+import { CommandOpts } from './types'
 import { workspace } from 'vscode'
 
 export const getPackageJson = async (): Promise<undefined | any> =>
@@ -26,5 +26,5 @@ export const buildConfigFromPackageJson = async (defaultColor: string) => {
 		color: defaultColor || 'white',
 		name: key,
 		singleInstance: true
-	})) as RunButton[]
+	})) as CommandOpts[]
 }

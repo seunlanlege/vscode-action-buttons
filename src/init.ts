@@ -1,6 +1,6 @@
 import { buildConfigFromPackageJson } from './packageJson'
 import * as vscode from 'vscode'
-import { RunButton } from './types'
+import { CommandOpts } from './types'
 import * as path from 'path'
 
 const registerCommand = vscode.commands.registerCommand
@@ -13,7 +13,7 @@ const init = async (context: vscode.ExtensionContext) => {
 	const defaultColor = config.get<string>('defaultColor')
 	const reloadButton = config.get<string>('reloadButton')
 	const loadNpmCommands = config.get<boolean>('loadNpmCommands')
-	const cmds = config.get<RunButton[]>('commands')
+	const cmds = config.get<CommandOpts[]>('commands')
 	const commands = []
 
 	if (reloadButton !== null) {
@@ -43,7 +43,7 @@ const init = async (context: vscode.ExtensionContext) => {
 	if (commands.length) {
 		const terminals: { [name: string]: vscode.Terminal } = {}
 		commands.forEach(
-			({ cwd, command, name, color, singleInstance, focus, useVsCodeApi }: RunButton) => {
+			({ cwd, command, name, color, singleInstance, focus, useVsCodeApi }: CommandOpts) => {
 				const vsCommand = `extension.${name.replace(' ', '')}`
 
 				const disposable = registerCommand(vsCommand, async () => {
@@ -136,7 +136,7 @@ function loadButton({
 	name,
 	color,
 	vsCommand
-}: RunButton) {
+}: CommandOpts) {
 	const runButton = vscode.window.createStatusBarItem(1, 0)
 	runButton.text = name
 	runButton.color = color
