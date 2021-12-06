@@ -15,7 +15,7 @@ You can define a custom action to build a rust project like so.
 
 ## Installation and set up
 
- - [x]  Search for `VsCode Action Buttons` in the extensions store.
+ - [x] Search for `VsCode Action Buttons` in the extensions store.
 
  - [x] After installing, type `ctrl + shift + p` and open up work space settings.
 
