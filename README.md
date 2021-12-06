@@ -1,27 +1,26 @@
 # VsCode Action Buttons
 
-This allows you to define custom actions such as `run` or `build` and append them to a status bar button in vscode.
-
-## NEW!
-
-You can now execute Visual Studio API commands through action buttons.
+Add customizable buttons to the status bar to execute actions or tasks in VS Code.
 
 ## Features
 
-You can define a custom action to build a rust project like so.
+* Execute command in terminal
+* Execute VS Code command
+    * Any command that can be activated via a keyboard shortcut can be activated via a button
+* Ability to customize text color for each button
+* Add icons to buttons
+    * Icons can be added to buttons by using the Markdown icons-in-labels syntax. For example, to add an alert icon you include `$(alert) in the button name. See https://code.visualstudio.com/api/references/icons-in-labels for more info
+
+### Example
 
 ![](action.gif)
 
+## Installation and setup
 
-## Installation and set up
-
- - [x] Search for `VsCode Action Buttons` in the extensions store.
-
- - [x] After installing, type `ctrl + shift + p` and open up work space settings.
-
- - [x] Now you can define, your action buttons. Below is a sample.
-
- - [x] Now Reload.
+ - [x] Install the `VsCode Action Buttons` extension in your VS Code instance.
+ - [x] After installing, open your VS Code settings (`Ctrl + ,`). Navigate to the `VsCode Action Buttons` section.
+ - [x] Define the action buttons you want. Below is a sample configuration for reference.
+ - [x] Reload the VS Code window to see the new buttons. Alternatively, you can run the `Refresh Action Buttons` command to refresh without reloading the window.
 
  ```json
  	"actionButtons": {
@@ -50,24 +49,13 @@ You can define a custom action to build a rust project like so.
 		 ]
 	 }
  ```
- ([List of VSCommands](https://gist.github.com/skfarhat/4e88ef386c93b9dceb98121d9457edbf) )
 
-https://code.visualstudio.com/api/references/icons-in-labels
+## Config Options
 
- # Alternatively
-
- If you open an existing project and want to set up action buttons for that workspace.
-
- * Define the action buttons in your workspace settings.
- * Then, click on `Refresh Action Buttons` in the status bar
- * You Should now see the action buttons on the status bar :).
-
-# Config Options
-
-## singleInstance: boolean default [false]
+### singleInstance: boolean default [false]
 	Kills the running associated process and restarts it.
 
-## focus: boolean default [false]
+### focus: boolean default [false]
     Focus the terminal after running the command
 
 ## Usage
@@ -104,7 +92,7 @@ As seen in the previous example, vars such as `${file}` can be used. Below is a 
 * `selectedText` - the current selected text in the active file
 * `execPath` - the path to the running VS Code executable
 
-# Release Notes
+## Release Notes
 
 ### v1.1.5
 Added support for VSCode API calls
