@@ -64,6 +64,10 @@
 										"type": "string",
 										"markdownDescription": "Command to execute when action is activated.\n\nIf `useVsCodeApi` is `true`, this is the VS Code command to execute. Otherwise, this specifies the command to execute in the terminal"
 									},
+									"tooltip": {
+										"type": "string",
+										"markdownDescription": "Tooltip text to display when hovering over the button"
+									},
 									"color": {
 										"type": "string",
 										"markdownDescription": "Specifies the action button text color"
