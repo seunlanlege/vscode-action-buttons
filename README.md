@@ -70,6 +70,8 @@ Add customizable buttons to the status bar to execute actions or tasks in VS Cod
 	* If `useVsCodeApi` is `true`, this is the VS Code command to execute. Otherwise, this specifies the command to execute in the terminal
 * **color**
     * Specifies the action button text color. Defaults to `defaultColor`.
+* **tooltip**
+    * Tooltip text to display when hovering over the button. Defaults to `command`.
 * **cwd**
     * Start directory when executing terminal command. Defaults to `${workspaceFolder}`. Only valid when `useVsCodeApi` is `false`
 * **singleInstance**
