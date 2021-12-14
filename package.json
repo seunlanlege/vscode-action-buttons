@@ -1,7 +1,7 @@
 {
 	"name": "action-buttons",
 	"displayName": "VsCode Action Buttons",
-	"description": "",
+	"description": "Add customizable buttons to the status bar to execute actions or tasks",
 	"version": "1.2.1",
 	"publisher": "seunlanlege",
 	"repository": {
@@ -13,6 +13,13 @@
 	},
 	"categories": [
 		"Other"
+	],
+	"keywords": [
+		"action",
+		"buttons",
+		"task",
+		"runner",
+		"status bar"
 	],
 	"activationEvents": [
 		"*"
@@ -31,47 +38,78 @@
 			"properties": {
 				"actionButtons": {
 					"type": "object",
+					"additionalProperties": false,
+					"default": {
+						"commands": [],
+						"defaultColor": "white",
+						"reloadButton": "↻",
+						"loadNpmCommands": false
+					},
 					"properties": {
 						"commands": {
 							"type": "array",
 							"items": {
 								"type": "object",
+								"additionalProperties": false,
+								"required": [
+									"name",
+									"command"
+								],
 								"properties": {
-									"cwd": {
+									"name": {
 										"type": "string",
-										"required": false
+										"markdownDescription": "Name of the action button"
 									},
 									"command": {
 										"type": "string",
-										"required": true
-									},
-									"singleInstance": {
-										"type": "boolean"
-									},
-									"name": {
-										"type": "string"
+										"markdownDescription": "Command to execute when action is activated.\n\nIf `useVsCodeApi` is `true`, this is the VS Code command to execute. Otherwise, this specifies the command to execute in the terminal"
 									},
 									"color": {
 										"type": "string",
-										"required": false
+										"markdownDescription": "Specifies the action button text color"
+									},
+									"cwd": {
+										"type": "string",
+										"markdownDescription": "Start directory when executing terminal command\n\nOnly valid when `useVsCodeApi` is `false`"
+									},
+									"singleInstance": {
+										"type": "boolean",
+										"default": false,
+										"markdownDescription": "Reopen associated terminal each time this action is activated\n\nOnly valid when `useVsCodeApi` is `false`"
+									},
+									"focus": {
+										"type": "boolean",
+										"default": false,
+										"markdownDescription": "Focus the terminal after executing the command.\n\nOnly valid when `useVsCodeApi` is `false`"
+									},
+									"useVsCodeApi": {
+										"type": "boolean",
+										"default": false,
+										"markdownDescription": "Specifies whether to execute a VS Code command or terminal command"
 									}
 								}
 							}
 						},
 						"defaultColor": {
 							"type": "string",
-							"required": false
+							"required": false,
+							"default": "white",
+							"markdownDescription": "Default color to use for action button text"
 						},
 						"reloadButton": {
 							"type": [
 								"string",
 								"null"
 							],
-							"required": false
+							"required": false,
+							"default": "↻",
+							"markdownDescription": "Reload button text. If `null`, button is disabled"
 						},
 						"loadNpmCommands": {
 							"type": "boolean",
-							"required": false
+							"required": false,
+							"default": false,
+							"markdownDescription": "Specifies whether to automatically generate buttons from npm commands listed in `package.json`"
 						}
 					}
 				}
