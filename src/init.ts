@@ -89,6 +89,11 @@ const init = async (context: vscode.ExtensionContext) => {
 						execPath: process.execPath
 					}
 
+					if (!command) {
+						vscode.window.showErrorMessage('No command to execute for this action');
+						return;
+					}
+
 					if (useVsCodeApi) {
 						vscode.commands.executeCommand(command);
 					} else {
