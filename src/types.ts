@@ -7,6 +7,7 @@ export interface CommandOpts {
 	color: string
 	focus?: boolean
 	useVsCodeApi?: boolean
+	args?: string[]
 }
 
 export interface ButtonOpts {

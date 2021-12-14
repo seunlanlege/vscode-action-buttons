@@ -43,7 +43,7 @@ const init = async (context: vscode.ExtensionContext) => {
 	if (commands.length) {
 		const terminals: { [name: string]: vscode.Terminal } = {}
 		commands.forEach(
-			({ cwd, command, name, tooltip, color, singleInstance, focus, useVsCodeApi }: CommandOpts) => {
+			({ cwd, command, name, tooltip, color, singleInstance, focus, useVsCodeApi, args }: CommandOpts) => {
 				const vsCommand = `extension.${name.replace(' ', '')}`
 
 				const disposable = registerCommand(vsCommand, async () => {
@@ -95,7 +95,7 @@ const init = async (context: vscode.ExtensionContext) => {
 					}
 
 					if (useVsCodeApi) {
-						vscode.commands.executeCommand(command);
+						vscode.commands.executeCommand(command, ...(args || []));
 					} else {
 						let assocTerminal = terminals[vsCommand]
 						if (!assocTerminal) {
