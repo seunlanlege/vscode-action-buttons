@@ -1,5 +1,6 @@
 export interface CommandOpts {
 	cwd?: string
+	saveAll?: boolean
 	command: string
 	singleInstance?: boolean
 	name: string
