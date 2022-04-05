@@ -30,18 +30,18 @@ Add customizable buttons to the status bar to execute actions or tasks in VS Cod
 		 "commands": [
 			 {
 				 "cwd": "/home/custom_folder", 	// Terminal initial folder ${workspaceFolder} and os user home as defaults
-				 "name": "Run Cargo",
+				 "name": "$(triangle-right) Run Cargo",
 				 "color": "green",
 				 "singleInstance": true,
 				 "command": "cargo run ${file}", // This is executed in the terminal.
 			 },
 			 {
-				 "name": "Build Cargo",
+				 "name": "$(tools) Build Cargo",
 				 "color": "green",
 				 "command": "cargo build ${file}",
 			 },
 			 {
-				"name": "🪟 Split editor",
+				"name": "$(split-horizontal) Split editor",
 				"color": "orange",
 				"useVsCodeApi": true,
 				"command": "workbench.action.splitEditor"
@@ -55,7 +55,7 @@ Add customizable buttons to the status bar to execute actions or tasks in VS Cod
 * **reloadButton**
     * Text for reload actions button. Defaults to `↻`. If null, the reload button is disabled.
 * **defaultColor**
-    * Default text color of action buttons. Defaults to `white`.
+    * Default text color of action buttons. Defaults to `white`. To set default theme color type `none`.
 * **loadNpmCommands**
     * Whether or not to automatically generate action buttons from commands specified in `package.json`. Defaults to `false`.
 * **commands**
@@ -64,9 +64,7 @@ Add customizable buttons to the status bar to execute actions or tasks in VS Cod
 ### Command Options
 
 * **name**
-    * Name of the action button. This field is required.
-* **saveAll**
-	* Save all open files before execute command
+    * Name of the action button. This field is required. You can add icons in command name by typing `$(icon-name)`. Look [here](https://code.visualstudio.com/api/references/icons-in-labels#icon-listing) for icons. (Note: If you will misspell no icons will show)
 * **command**
     * Command to execute when action is activated. This field is required.
 	* If `useVsCodeApi` is `true`, this is the VS Code command to execute. Otherwise, this specifies the command to execute in the terminal
