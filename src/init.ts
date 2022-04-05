@@ -43,7 +43,7 @@ const init = async (context: vscode.ExtensionContext) => {
 	if (commands.length) {
 		const terminals: { [name: string]: vscode.Terminal } = {}
 		commands.forEach(
-			({ cwd, command, name, tooltip, color, singleInstance, focus, useVsCodeApi, args }: CommandOpts) => {
+			({ cwd, saveAll, command, name, tooltip, color, singleInstance, focus, useVsCodeApi, args }: CommandOpts) => {
 				const vsCommand = `extension.${name.replace(' ', '')}`
 
 				const disposable = registerCommand(vsCommand, async () => {
@@ -92,6 +92,10 @@ const init = async (context: vscode.ExtensionContext) => {
 					if (!command) {
 						vscode.window.showErrorMessage('No command to execute for this action');
 						return;
+					}
+
+					if (saveAll) {
+						vscode.commands.executeCommand('workbench.action.files.saveAll');
 					}
 
 					if (useVsCodeApi) {

@@ -65,6 +65,8 @@ Add customizable buttons to the status bar to execute actions or tasks in VS Cod
 
 * **name**
     * Name of the action button. This field is required. You can add icons in command name by typing `$(icon-name)`. Look [here](https://primer.style/octicons/) for icons. (Note: If you will misspell no icons will show)
+* **saveAll**
+	* Save all open files before execute command
 * **command**
     * Command to execute when action is activated. This field is required.
 	* If `useVsCodeApi` is `true`, this is the VS Code command to execute. Otherwise, this specifies the command to execute in the terminal

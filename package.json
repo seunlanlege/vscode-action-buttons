@@ -60,6 +60,11 @@
 										"type": "string",
 										"markdownDescription": "Name of the action button"
 									},
+									"saveAll": {
+										"type": "boolean",
+										"markdownDescription": "Save all open files before execute command"
+
+									},
 									"command": {
 										"type": "string",
 										"markdownDescription": "Command to execute when action is activated.\n\nIf `useVsCodeApi` is `true`, this is the VS Code command to execute. Otherwise, this specifies the command to execute in the terminal"
