@@ -112,7 +112,11 @@ const init = async (context: vscode.ExtensionContext) => {
 								assocTerminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
 								terminals[vsCommand] = assocTerminal;
 							} else {
-								assocTerminal.sendText('clear');
+								if (process.platform === "win32") {
+									assocTerminal.sendText("cls");
+								} else {
+									assocTerminal.sendText("clear");
+								}
 							}
 						}
 						assocTerminal.show(!focus);
