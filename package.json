@@ -2,7 +2,7 @@
 	"name": "action-buttons",
 	"displayName": "VsCode Action Buttons",
 	"description": "Add customizable buttons to the status bar to execute actions or tasks",
-	"version": "1.2.1",
+	"version": "1.2.2",
 	"publisher": "seunlanlege",
 	"repository": {
 		"type": "git",
