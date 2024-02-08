@@ -121,6 +121,10 @@ As seen in the previous example, vars such as `${file}` can be used. Below is a 
 
 ## Release Notes
 
+### v1.2.2
+
+Fix clear terminal command on windows [#85](https://github.com/seunlanlege/vscode-action-buttons/pull/85)
+
 ### v1.1.5
 Added support for VSCode API calls
 Added `api` option.
