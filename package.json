@@ -21,9 +21,7 @@
 		"runner",
 		"status bar"
 	],
-	"activationEvents": [
-		"*"
-	],
+	"activationEvents": [],
 	"main": "./out/src/extension",
 	"contributes": {
 		"commands": [
