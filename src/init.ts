@@ -36,11 +36,13 @@ const init = async (context: vscode.ExtensionContext) => {
 	}
 
 	if (inheritGlobalCommands) {
-		const config = vscode.workspace.getConfiguration('actionButtons', null);
-		console.log(config);
-		const cmds = config.get<CommandOpts[]>('commands')
+		let commandsInspected = config.inspect('commands');
+		const cmdsGlobal = commandsInspected.globalValue as CommandOpts[];
+		if (cmdsGlobal && cmdsGlobal.length) {
+			commands.push(...cmdsGlobal)
+		}
 	}
-	return;
+
 	if (cmds && cmds.length) {
 		commands.push(...cmds)
 	}
