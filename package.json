@@ -127,6 +127,12 @@
 							"required": false,
 							"default": false,
 							"markdownDescription": "Specifies whether to automatically generate buttons from npm commands listed in `package.json`"
+						},
+						"inheritGlobalCommands": {
+							"type": "boolean",
+							"required": false,
+							"default": false,
+							"markdownDescription": "In case you use workspace-scope settings, and want to also use User (global) scope settings, you might enable this"
 						}
 					}
 				}

@@ -27,6 +27,7 @@ Add customizable buttons to the status bar to execute actions or tasks in VS Cod
 		 "defaultColor": "#ff0034", // Can also use string color names.
 		 "loadNpmCommands":false, // Disables automatic generation of actions for npm commands.
 		 "reloadButton":"♻️", // Custom reload button text or icon (default ↻). null value enables automatic reload on configuration change
+		 "inheritGlobalCommands": false, // In case you use workspace-scope settings, and want to also use User (global) scope settings, you might enable this
 		 "commands": [
 			 {
 				 "cwd": "/home/custom_folder", 	// Terminal initial folder ${workspaceFolder} and os user home as defaults

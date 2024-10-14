@@ -13,6 +13,7 @@ const init = async (context: vscode.ExtensionContext) => {
 	const defaultColor = config.get<string>('defaultColor')
 	const reloadButton = config.get<string>('reloadButton')
 	const loadNpmCommands = config.get<boolean>('loadNpmCommands')
+	const inheritGlobalCommands = config.get<boolean>('inheritGlobalCommands')
 	const cmds = config.get<CommandOpts[]>('commands')
 	const commands: CommandOpts[] = []
 
@@ -34,6 +35,12 @@ const init = async (context: vscode.ExtensionContext) => {
 		disposables.push(onCfgChange);
 	}
 
+	if (inheritGlobalCommands) {
+		const config = vscode.workspace.getConfiguration('actionButtons', null);
+		console.log(config);
+		const cmds = config.get<CommandOpts[]>('commands')
+	}
+	return;
 	if (cmds && cmds.length) {
 		commands.push(...cmds)
 	}
