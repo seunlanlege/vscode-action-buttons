@@ -169,13 +169,17 @@ function loadButton({
 	disposables.push(runButton)
 }
 
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function interpolateString(tpl: string, data: object): string {
 	let re = /\$\{([^\}]+)\}/g, match;
 	while (match = re.exec(tpl)) {
 		let path = match[1].split('.').reverse();
 		let obj = data[path.pop()];
 		while (path.length) obj = obj[path.pop()];
-		tpl = tpl.replace(match[0], obj)
+		tpl = tpl.replace(new RegExp(escapeRegExp(match[0]), "g"), obj)
 	}
 	return tpl;
 }
