@@ -1,7 +1,8 @@
 import { buildConfigFromPackageJson } from './packageJson'
 import * as vscode from 'vscode'
-import { ButtonOpts, CommandOpts } from './types'
-import * as path from 'path'
+import * as path from "path"
+import { homedir } from "os"
+import { ButtonOpts, CommandOpts, VsCodeVars } from './types'
 
 const registerCommand = vscode.commands.registerCommand
 
@@ -26,7 +27,7 @@ const init = async (context: vscode.ExtensionContext) => {
 		})
 	}
 	else {
-		const onCfgChange:vscode.Disposable = vscode.workspace.onDidChangeConfiguration(e => {
+		const onCfgChange: vscode.Disposable = vscode.workspace.onDidChangeConfiguration(e => {
 			if (e.affectsConfiguration('actionButtons')) {
 				vscode.commands.executeCommand('extension.refreshButtons');
 			}
@@ -56,47 +57,37 @@ const init = async (context: vscode.ExtensionContext) => {
 				const vsCommand = `extension.${name.replace(' ', '')}`
 
 				const disposable = registerCommand(vsCommand, async () => {
-					const vars = {
-
-						// - the path of the folder opened in VS Code
-						workspaceFolder: vscode.workspace.rootPath,
-
-						// - the name of the folder opened in VS Code without any slashes (/)
-						workspaceFolderBasename: (vscode.workspace.rootPath)? path.basename(vscode.workspace.rootPath) : null,
-
-						// - the current opened file
+					const vars: VsCodeVars = {
+						userHome: homedir(),
+						workspaceFolder: vscode.workspace.workspaceFolders[0].uri?.fsPath,
+						workspaceFolderBasename: (vscode.workspace.workspaceFolders[0]) ? path.basename(vscode.workspace.workspaceFolders[0].uri?.fsPath) : null,
 						file: (vscode.window.activeTextEditor) ? vscode.window.activeTextEditor.document.fileName : null,
-
-						// - the current opened file relative to workspaceFolder
-						relativeFile: (vscode.window.activeTextEditor && vscode.workspace.rootPath) ? path.relative(
-							vscode.workspace.rootPath,
+						fileWorkspaceFolder: (vscode.window.activeTextEditor) ?
+							vscode.workspace.getWorkspaceFolder(vscode.window.activeTextEditor.document.uri) != undefined ?
+								normalizeDriveLetter(vscode.workspace.getWorkspaceFolder(vscode.window.activeTextEditor.document.uri).uri?.fsPath)
+								: null
+							: null,
+						relativeFile: (vscode.window.activeTextEditor && vscode.workspace.workspaceFolders[0]) ? path.relative(
+							vscode.workspace.workspaceFolders[0].uri?.fsPath,
 							vscode.window.activeTextEditor.document.fileName
 						) : null,
-
-						// - the current opened file's basename
+						relativeFileDirname: (vscode.window.activeTextEditor && vscode.workspace.workspaceFolders[0]) ? path.basename(path.dirname(path.relative(
+							vscode.workspace.workspaceFolders[0].uri?.fsPath,
+							vscode.window.activeTextEditor.document.fileName
+						))) : null,
 						fileBasename: (vscode.window.activeTextEditor) ? path.basename(vscode.window.activeTextEditor.document.fileName) : null,
-
-						// - the current opened file's basename with no file extension
 						fileBasenameNoExtension: (vscode.window.activeTextEditor) ? path.parse(path.basename(vscode.window.activeTextEditor.document.fileName)).name : null,
-
-						// - the current opened file's dirname
-						fileDirname: (vscode.window.activeTextEditor) ? path.dirname(vscode.window.activeTextEditor.document.fileName) : null,
-
-						// - the current opened file's extension
 						fileExtname: (vscode.window.activeTextEditor) ? path.parse(path.basename(vscode.window.activeTextEditor.document.fileName)).ext : null,
-
-						// - the task runner's current working directory on startup
-						cwd: cwd || vscode.workspace.rootPath || require('os').homedir(),
-
-						//- the current selected line number in the active file
+						fileDirname: (vscode.window.activeTextEditor) ? path.dirname(vscode.window.activeTextEditor.document.fileName) : null,
+						fileDirnameBasename: (vscode.window.activeTextEditor) ? path.basename(path.dirname(vscode.window.activeTextEditor.document.fileName)) : null,
 						lineNumber: (vscode.window.activeTextEditor) ? vscode.window.activeTextEditor.selection.active.line + 1 : null,
-
-						// - the current selected text in the active file
+						columnNumber: (vscode.window.activeTextEditor) ? vscode.window.activeTextEditor.selection.active.character + 1 : null,
 						selectedText: (vscode.window.activeTextEditor) ? vscode.window.activeTextEditor.document.getText(vscode.window.activeTextEditor.selection) : null,
-
-						// - the path to the running VS Code executable
-						execPath: process.execPath
-					}
+						execPath: process.execPath,
+						pathSeparator: process.platform == "win32" ? "\\" : "/",
+						cwd: vscode.workspace.workspaceFolders[0].uri?.fsPath || homedir()
+					};
+					vars.cwd = interpolateString(cwd, vars) ?? vars.cwd
 
 					if (!command) {
 						vscode.window.showErrorMessage('No command to execute for this action');
@@ -176,12 +167,41 @@ function escapeRegExp(string) {
 function interpolateString(tpl: string, data: object): string {
 	let re = /\$\{([^\}]+)\}/g, match;
 	while (match = re.exec(tpl)) {
+		if (match[1].startsWith("workspaceFolder:")) {
+			const folderName = match[1].split(":")[1];
+			const found = vscode.workspace.workspaceFolders.find(f => f.name === folderName);
+
+			const value = found ? found.uri.fsPath : "";
+			tpl = tpl.replace(match[0], value);
+			continue;
+		}
 		let path = match[1].split('.').reverse();
 		let obj = data[path.pop()];
 		while (path.length) obj = obj[path.pop()];
 		tpl = tpl.replace(new RegExp(escapeRegExp(match[0]), "g"), obj)
 	}
 	return tpl;
+}
+
+export function isWindowsDriveLetter(char0: string): boolean {
+	return char0.match(/[A-Za-z]/) != null
+}
+
+export function hasDriveLetter(path: string, isWindowsOS: boolean): boolean {
+	if (isWindowsOS) {
+		return isWindowsDriveLetter(path.charAt(0)) && path.charAt(1) === ':';
+	}
+
+	return false;
+}
+
+export function normalizeDriveLetter(path: string): string {
+	console.log("path: " + path)
+	if (hasDriveLetter(path, process.platform == "win32")) {
+		return path.charAt(0).toUpperCase() + path.slice(1);
+	}
+
+	return path;
 }
 
 export default init
