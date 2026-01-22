@@ -54,6 +54,21 @@ const init = async (context: vscode.ExtensionContext) => {
 		commands.forEach(
 			({ cwd, saveAll, command, name, tooltip, color, singleInstance, focus, useVsCodeApi, args }: CommandOpts) => {
 				const vsCommand = `extension.${name.replace(' ', '')}`
+			({
+				cwd,
+				saveAll,
+				command,
+				name,
+				tooltip,
+				color,
+				openOwnTerminal,
+				singleInstance,
+				focus,
+				closeOnSuccess,
+				useVsCodeApi,
+				args
+			}: CommandOpts) => {
+				const vsCommand = `extension.${name.replace(/\s/g, '')}`
 
 				const disposable = registerCommand(vsCommand, async () => {
 					const vars = {
@@ -110,26 +125,59 @@ const init = async (context: vscode.ExtensionContext) => {
 					if (useVsCodeApi) {
 						vscode.commands.executeCommand(command, ...(args || []));
 					} else {
-						let assocTerminal = terminals[vsCommand]
-						if (!assocTerminal) {
-							assocTerminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
-							terminals[vsCommand] = assocTerminal;
-						} else {
-							if (singleInstance) {
-								delete terminals[vsCommand];
-								assocTerminal.dispose();
+						let assocTerminal: vscode.Terminal | null = null
+						if (openOwnTerminal === undefined)
+							openOwnTerminal = true
+						// Opens a new terminal if there is no opened terminals if openOwnTerminal is true
+						if (openOwnTerminal) {
+							assocTerminal = terminals[vsCommand]
+							// If assocTerminal.exitStatus is defined, then the terminal has exited, so we need a new one
+							if (!assocTerminal || assocTerminal?.exitStatus !== undefined) {
 								assocTerminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
 								terminals[vsCommand] = assocTerminal;
 							} else {
-								if (process.platform === "win32") {
-									assocTerminal.sendText("cls");
+								if (singleInstance) {
+									delete terminals[vsCommand];
+									assocTerminal.dispose();
+									assocTerminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
+									terminals[vsCommand] = assocTerminal;
 								} else {
-									assocTerminal.sendText("clear");
+									if (process.platform === "win32") {
+										assocTerminal.sendText("cls");
+									} else {
+										assocTerminal.sendText("clear");
+									}
 								}
 							}
 						}
-						assocTerminal.show(!focus);
-						assocTerminal.sendText(interpolateString(command, vars));
+						else {
+							// Find the first terminal not used by this extension
+							for (let terminal of vscode.window.terminals) {
+								if (!Object.values(terminals).some(t => t === terminal)) {
+									assocTerminal = terminal
+									break
+								}
+							}
+							if (!assocTerminal) // Terminal could not be found if: there is no opened terminal OR all opened terminals are used by other commands from this extension
+								assocTerminal = vscode.window.createTerminal({ name, cwd: vars.cwd });
+						}
+						if (assocTerminal) {
+							const requestId = Math.random().toString(36).slice(2);
+							const disposable = vscode.window.onDidEndTerminalShellExecution(e => {
+								if (e.terminal == assocTerminal && e.execution.commandLine.value.includes(`__REQ__:${requestId}`)) {
+									if (closeOnSuccess && e.exitCode == 0) {
+										assocTerminal.dispose()
+										delete terminals[vsCommand];
+									}
+									disposable.dispose();
+								}
+							})
+							assocTerminal.show(!focus);
+							if (closeOnSuccess)
+								assocTerminal.sendText(interpolateString(command, vars) + `; Write-Output "__REQ__:${requestId}"`);
+							else
+								assocTerminal.sendText(interpolateString(command, vars));
+						}
 					}
 				})
 

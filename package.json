@@ -81,6 +81,11 @@
 										"type": "string",
 										"markdownDescription": "Start directory when executing terminal command\n\nOnly valid when `useVsCodeApi` is `false`"
 									},
+									"openOwnTerminal": {
+										"type": "boolean",
+										"default": true,
+										"markdownDescription": "Execute the command on it's own terminal. If false, the command will be executed in the first active terminal that has not be opened by other commands.\n\nOnly valid when `useVsCodeApi` is `false`\n\nThis is True by default"
+									},
 									"singleInstance": {
 										"type": "boolean",
 										"default": false,
@@ -90,6 +95,11 @@
 										"type": "boolean",
 										"default": false,
 										"markdownDescription": "Focus the terminal after executing the command.\n\nOnly valid when `useVsCodeApi` is `false`"
+									},
+									"closeOnSuccess": {
+										"type": "boolean",
+										"default": false,
+										"markdownDescription": "Close the terminal if the command is successfully executed\n\nOnly valid when `useVsCodeApi` is `false`"
 									},
 									"useVsCodeApi": {
 										"type": "boolean",
