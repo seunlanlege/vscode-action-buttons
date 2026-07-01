@@ -9,6 +9,7 @@ export interface CommandOpts {
 	focus?: boolean
 	useVsCodeApi?: boolean
 	args?: string[]
+	group?: string				// NEW: optional group tag; ungrouped = always visible
 }
 
 export interface ButtonOpts {
