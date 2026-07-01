@@ -14,6 +14,8 @@ const init = async (context: vscode.ExtensionContext) => {
 	const reloadButton = config.get<string>('reloadButton')
 	const loadNpmCommands = config.get<boolean>('loadNpmCommands')
 	const inheritGlobalCommands = config.get<boolean>('inheritGlobalCommands')
+	const toggleGroupButton = config.get<string>('toggleGroupButton') // e.g. ">> View". null/undefined = disabled
+	const activeGroup = context.workspaceState.get<string>('actionButtons.activeGroup', 'all')
 	const cmds = config.get<CommandOpts[]>('commands')
 	const commands: CommandOpts[] = []
 
@@ -48,10 +50,36 @@ const init = async (context: vscode.ExtensionContext) => {
 	}
 
 	if (loadNpmCommands !== false) commands.push(...(await buildConfigFromPackageJson(defaultColor)))
+	
+	const groups = [...new Set(commands.map(c => c.group).filter(Boolean))]
+
+	// Binary (full <-> minimal) when 0-1 groups; multi-way cycle when 2+.
+	// Persist it so the cycle command shares init's merged view of the groups.
+	const cycle = groups.length > 1 ? ['all', ...groups, 'none'] : ['all', 'none']
+	context.workspaceState.update('actionButtons.groupCycle', cycle)
+
+	// When the toggle button is disabled, never hide anything - this avoids a
+	// lockout if the user disables it while a non-'all' group is still persisted.
+	const effectiveGroup = toggleGroupButton ? activeGroup : 'all'
+
+	// Add the cycle/toggle button, mirroring how the reload button is added
+	if (toggleGroupButton && groups.length) {
+		loadButton({
+			command: 'extension.cycleButtonGroup',
+			name: `${toggleGroupButton} (${activeGroup})`,
+			tooltip: 'Cycles visible action-button groups: ' + groups.join(', '),
+			color: defaultColor,
+		})
+	}
+
+	// Ungrouped always visible; grouped buttons only when active or "all"
+	const visibleCommands = commands.filter(c =>
+		!c.group || effectiveGroup === 'all' || c.group === effectiveGroup
+	)
 
 	if (commands.length) {
 		const terminals: { [name: string]: vscode.Terminal } = {}
-		commands.forEach(
+		visibleCommands.forEach(
 			({ cwd, saveAll, command, name, tooltip, color, singleInstance, focus, useVsCodeApi, args }: CommandOpts) => {
 				const vsCommand = `extension.${name.replace(' ', '')}`
 

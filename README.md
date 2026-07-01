@@ -55,6 +55,8 @@ Add customizable buttons to the status bar to execute actions or tasks in VS Cod
 
 * **reloadButton**
     * Text for reload actions button. Defaults to `↻`. If null, the reload button is disabled.
+* **toggleGroupButton**
+    * Text for a button that cycles which command groups are shown. Defaults to `null` (disabled). Only appears when at least one command defines a `group`. Clicking it cycles through `all` → each group → `none` (ungrouped only); with a single group it acts as a simple full/minimal toggle. See the `group` command option below.
 * **defaultColor**
     * Default text color of action buttons. Defaults to `white`. To set default theme color type `none`.
 * **loadNpmCommands**
@@ -85,6 +87,8 @@ Add customizable buttons to the status bar to execute actions or tasks in VS Cod
     * Specifies whether to execute a VS Code command or terminal command. Defaults to `false`.
 * **args**
     * Specifies additional arguments to pass to VS Code command. Only valid when `useVsCodeApi` is `true`.
+* **group**
+    * Optional tag that assigns the button to a group. Ungrouped buttons are always visible; grouped buttons are shown or hidden by the `toggleGroupButton` cycle. Useful for keeping project-specific buttons separate from ones you use everywhere.
 
 ## Usage
 
@@ -121,6 +125,9 @@ As seen in the previous example, vars such as `${file}` can be used. Below is a 
 * `execPath` - the path to the running VS Code executable
 
 ## Release Notes
+
+### v1.3.0
+Added `toggleGroupButton` and per-command `group` options for showing/hiding groups of buttons.
 
 ### v1.2.2
 
