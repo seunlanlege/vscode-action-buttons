@@ -62,11 +62,14 @@ const init = async (context: vscode.ExtensionContext) => {
 	// lockout if the user disables it while a non-'all' group is still persisted.
 	const effectiveGroup = toggleGroupButton ? activeGroup : 'all'
 
-	// Add the cycle/toggle button, mirroring how the reload button is added
+	// Add the cycle/toggle button, mirroring how the reload button is added.
+	// Only annotate with the active group in the multi-way cycle; a binary
+	// full/minimal toggle has no meaningful group name to show.
 	if (toggleGroupButton && groups.length) {
+		const name = groups.length > 1 ? `${toggleGroupButton} (${activeGroup})` : toggleGroupButton
 		loadButton({
 			command: 'extension.cycleButtonGroup',
-			name: `${toggleGroupButton} (${activeGroup})`,
+			name,
 			tooltip: 'Cycles visible action-button groups: ' + groups.join(', '),
 			color: defaultColor,
 		})
